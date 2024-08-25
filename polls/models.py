@@ -19,6 +19,9 @@ class Question(models.Model):
         return timezone.now() >= self.pub_date >= timezone.now() - datetime.timedelta(days=1)
     
     def has_valid_choices(self):
+        '''
+        Check if the question has 2 or more choices
+        '''
         return self.choice_set.count() > 1
 
     def __str__(self):
