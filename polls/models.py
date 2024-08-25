@@ -16,7 +16,7 @@ class Question(models.Model):
         '''
         Check if the question was pulished recently (<= 1day)
         '''
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+        return timezone.now() >= self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
     def __str__(self):
         return self.question_text
