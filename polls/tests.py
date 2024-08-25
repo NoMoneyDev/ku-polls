@@ -7,15 +7,18 @@ import datetime
 # Create your tests here.
 
 
-def create_question(question_text, days):
+def create_question(question_text, days, no_choice=False):
     """
     Create a question with the given `question_text` and published the
     given number of `days` offset to now (negative for questions published
     in the past, positive for questions that have yet to be published).
     """
     time = timezone.now() + datetime.timedelta(days=days)
-    return Question.objects.create(question_text=question_text, pub_date=time)
-
+    q = Question.objects.create(question_text=question_text, pub_date=time)
+    if not no_choice:
+        q.choice_set.create(question=q,choice_text='choice1')
+        q.choice_set.create(question=q,choice_text='choice2')
+    return q
 
 class QuestionModelTests(TestCase):
 
@@ -55,7 +58,7 @@ class QuestionIndexViewTests(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No polls are available.")
-        self.assertQuerysetEqual(response.context['questions_list'], [])
+        self.assertQuerySetEqual(response.context_data['questions_list'], [])
 
     def test_past_question(self):
         """
@@ -64,8 +67,8 @@ class QuestionIndexViewTests(TestCase):
         """
         question = create_question(question_text="Past question.", days=-30)
         response = self.client.get(reverse('polls:index'))
-        self.assertQuerysetEqual(
-            response.context['questions_list'],
+        self.assertQuerySetEqual(
+            response.context_data['questions_list'],
             [question],
         )
 
@@ -77,7 +80,7 @@ class QuestionIndexViewTests(TestCase):
         create_question(question_text="Future question.", days=30)
         response = self.client.get(reverse('polls:index'))
         self.assertContains(response, "No polls are available.")
-        self.assertQuerysetEqual(response.context['questions_list'], [])
+        self.assertQuerySetEqual(response.context_data['questions_list'], [])
 
     def test_future_question_and_past_question(self):
         """
@@ -87,8 +90,8 @@ class QuestionIndexViewTests(TestCase):
         question = create_question(question_text="Past question.", days=-30)
         create_question(question_text="Future question.", days=30)
         response = self.client.get(reverse('polls:index'))
-        self.assertQuerysetEqual(
-            response.context['questions_list'],
+        self.assertQuerySetEqual(
+            response.context_data['questions_list'],
             [question],
         )
 
@@ -99,9 +102,20 @@ class QuestionIndexViewTests(TestCase):
         question1 = create_question(question_text="Past question 1.", days=-30)
         question2 = create_question(question_text="Past question 2.", days=-5)
         response = self.client.get(reverse('polls:index'))
-        self.assertQuerysetEqual(
-            response.context['questions_list'],
-            [question2, question1],
+        self.assertQuerySetEqual(
+            response.context_data['questions_list'],
+            [question2, question1], ordered=False,
+        )
+
+    def test_question_with_no_choice(self):
+        """
+        The questions index page doesn't display questions without choices.
+        """
+        question = create_question(question_text='No Choice.', days=-30, no_choice=True)
+        response = self.client.get(reverse('polls:index'))
+        self.assertQuerySetEqual(
+            response.context_data['questions_list'],
+            [],
         )
 
 
