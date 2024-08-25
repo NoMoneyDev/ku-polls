@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY',default='bananaappleorangemonkeymoneynoodleengl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['testserver']
+ALLOWED_HOSTS = ['testserver','127.0.0.1',]
 
 
 # Application definition
