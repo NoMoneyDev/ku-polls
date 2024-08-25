@@ -14,7 +14,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         questions = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')
-        ids = [q.id for q in questions if q.has_choice()]
+        ids = [q.id for q in questions if q.has_valid_choices()]
         return Question.objects.filter(id__in=ids)
 
 class DetailView(generic.DetailView):
