@@ -1,0 +1,10 @@
+li a {
+    color: green;
+    size: 10vh;
+}
+body {
+    background: white;
+    background-image: url('images/drog.jpeg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
