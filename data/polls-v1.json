@@ -4,7 +4,8 @@
   "pk": 2,
   "fields": {
     "question_text": "What's the most delicious food",
-    "pub_date": "2024-08-25T11:24:04Z"
+    "pub_date": "2024-08-25T11:24:04Z",
+    "end_date": null
   }
 },
 {
@@ -12,7 +13,8 @@
   "pk": 3,
   "fields": {
     "question_text": "Noodles and Rice. What is superior?",
-    "pub_date": "2024-08-25T11:36:15Z"
+    "pub_date": "2024-08-25T11:36:15Z",
+    "end_date": null
   }
 },
 {

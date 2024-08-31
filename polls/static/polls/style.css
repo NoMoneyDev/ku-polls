@@ -1,7 +1,14 @@
 li a {
     color: green;
-    size: 10vh;
+    font-size: 2vh;   
 }
+
+li a:hover {
+    color: lightgreen;
+    font-size: 2vh;
+}
+
+
 body {
     background: white;
     background-image: url('images/drog.jpeg');

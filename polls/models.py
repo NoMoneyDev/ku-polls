@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.db import models
 from django.contrib import admin
+from django.utils.timezone import now
 import datetime
 
 
@@ -12,7 +13,8 @@ class Question(models.Model):
     along with methods to check if the question was pulished recently (<= 1day)
     '''
     question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', default=now)
+    end_date = models.DateTimeField("date expired", null=True)
 
     @admin.display(
         boolean=True,
@@ -30,7 +32,7 @@ class Question(models.Model):
         Check if the question has 2 or more choices
         '''
         return self.choice_set.count() > 1
-
+    
     def __str__(self):
         return self.question_text
 
