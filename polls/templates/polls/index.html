@@ -2,6 +2,12 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
+{% if messages %}
+    {% for message in messages %}
+    <li class="error_message">{{ message }}</li>
+    {% endfor %}
+{% endif %}
+
 {% if questions_list %}
 <h1>Available Polls</h1>
     <ul>

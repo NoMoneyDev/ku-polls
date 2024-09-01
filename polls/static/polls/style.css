@@ -8,6 +8,14 @@ li a:hover {
     font-size: 2vh;
 }
 
+a.redirect {
+    text-decoration: none !important;
+    color: black;
+}
+
+.error_message {
+    color: red;
+}
 
 body {
     background: white;

@@ -1,8 +1,7 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.utils import timezone
-from django.shortcuts import render, get_object_or_404
-from django.template import loader
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
+from django.contrib import messages
 from django.urls import reverse
 from .models import Question, Choice
 
@@ -13,16 +12,32 @@ class IndexView(generic.ListView):
     context_object_name = 'questions_list'
 
     def get_queryset(self):
-        questions = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')
-        ids = [q.id for q in questions if q.has_valid_choices()]
-        return Question.objects.filter(id__in=ids)[:5]
+        questions = Question.objects.all()
+        ids = [q.id for q in questions if (q.is_published() and q.choices_more_than_one())]
+        return Question.objects.filter(id__in=ids).order_by('pub_date')[:5]
+
 
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
 
+    def get(self, request, *args, **kwargs):
+        try:
+            question = self.get_object()
+        except Http404:
+            messages.error(request, 'The poll you are trying to access does not exists.')
+            return redirect('polls:index')
+        
+        if not question.can_vote():
+            messages.error(request, 'The poll you are trying to access is not in the voting period.')
+            return redirect('polls:index')
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        '''Excludes any questions that aren't published yet.'''
+        questions = Question.objects.all()
+        ids = [q.id for q in questions if q.is_published()]
+        return Question.objects.filter(id__in=ids)
     
 
 
@@ -41,7 +56,5 @@ def vote(request, question_id):
             'error_message' : "You didn't select a choice.",
         })
     else:
-        selected_choice.votes += 1
-        selected_choice.save()
+        selected_choice.vote()
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
-

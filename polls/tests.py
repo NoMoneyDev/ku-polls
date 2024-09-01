@@ -7,21 +7,29 @@ import datetime
 # Create your tests here.
 
 
-def create_question(question_text, days, no_choice=False):
+def create_question(question_text, days=0, end_day=0, default_pub_date=False, no_choice=False):
     """
     Create a question with the given `question_text` and published the
     given number of `days` offset to now (negative for questions published
     in the past, positive for questions that have yet to be published).
     """
     time = timezone.now() + datetime.timedelta(days=days)
-    q = Question.objects.create(question_text=question_text, pub_date=time)
+    end_time = timezone.now() + datetime.timedelta(days=end_day)
+    options = {'question_text' : question_text}
+    if not default_pub_date:
+        options['pub_date'] = time
+    if end_day:
+        options['end_date'] = end_time
+    q = Question.objects.create(**options)
     if not no_choice:
         q.choice_set.create(question=q,choice_text='choice1')
         q.choice_set.create(question=q,choice_text='choice2')
     return q
 
 class QuestionModelTests(TestCase):
-
+    '''
+    Test wes_published_recently() in Question with old, recent, future questions.
+    '''
     def test_was_published_recently_with_future_question(self):
         """
         was_published_recently() returns False for questions whose pub_date
@@ -51,6 +59,10 @@ class QuestionModelTests(TestCase):
 
 
 class QuestionIndexViewTests(TestCase):
+    '''
+    Test if questions show up when there are no_choice, past its pub_date, its pub_date is in the future,
+    or no questions at all.
+    '''
     def test_no_questions(self):
         """
         If no questions exist, an appropriate message is displayed.
@@ -58,7 +70,7 @@ class QuestionIndexViewTests(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No polls are available.")
-        self.assertQuerySetEqual(response.context_data['questions_list'], [])
+        self.assertQuerySetEqual(response.context_data['questions_list'], [])   
 
     def test_past_question(self):
         """
@@ -120,6 +132,9 @@ class QuestionIndexViewTests(TestCase):
 
 
 class QuestionDetailViewTests(TestCase):
+    '''
+    Test detail view if it shows past questions, or future questions.
+    '''
     def test_future_question(self):
         """
         The detail view of a question with a pub_date in the future
@@ -139,3 +154,75 @@ class QuestionDetailViewTests(TestCase):
         url = reverse('polls:detail', args=(past_question.id,))
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
+
+
+class QuestionIsPublishedTest(TestCase):
+    def test_past_question(self):
+        '''
+        Test is_published() in Question and check if it shows up in index view
+        '''
+        past_question = create_question(question_text='Past Question.', days=-5)
+        url = reverse('polls:index')
+        self.assertTrue(past_question.is_published())
+        response = self.client.get(url)
+        self.assertContains(response, past_question.question_text)
+
+    def test_default_question(self):
+        default_question = create_question(question_text='Default Question.', default_pub_date=True)
+        url = reverse('polls:index')
+        self.assertTrue(default_question.is_published())
+        response = self.client.get(url)
+        self.assertContains(response, default_question.question_text)
+
+    def test_future_question(self):
+        future_question = create_question(question_text='Future Question.', days=5)
+        url = reverse('polls:index')
+        self.assertFalse(future_question.is_published())
+        response = self.client.get(url)
+        self.assertNotContains(response, future_question.question_text)
+
+
+class QuestionCanVoteTest(TestCase):
+    '''
+    Test can_vote() in Question and test if you can vote
+    '''
+    def test_cannot_vote_before_pub_date(self):
+        future_question = create_question("future question", days=5, end_day=10)
+        choice = future_question.choice_set.all()[0]
+        self.assertFalse(future_question.can_vote())
+        self.assertFalse(choice.vote())
+        self.assertEqual(0, choice.votes)
+
+    def test_can_vote_after_pub_date(self):
+        present_question = create_question("present question", days=-5, end_day=5)
+        choice = present_question.choice_set.all()[0]
+        self.assertTrue(present_question.can_vote())
+        self.assertTrue(choice.vote())
+        self.assertEqual(1, choice.votes)
+    
+    def test_cannot_vote_after_end_date(self):
+        ended_question = create_question("Ended question", days=-5, end_day=-1)
+        choice = ended_question.choice_set.all()[0]
+        self.assertFalse(ended_question.can_vote())
+        self.assertFalse(choice.vote())
+        self.assertEqual(0, choice.votes)
+
+
+class QuestionVoteTest(TestCase):
+    def test_vote_before_pub_date(self):
+        future_question = create_question("future question", days=5, end_day=10)
+        choice = future_question.choice_set.all()[0]
+        self.assertFalse(choice.vote())
+        self.assertEqual(0, choice.votes)
+
+    def test_vote_after_pub_date(self):
+        present_question = create_question("present question", days=-5, end_day=5)
+        choice = present_question.choice_set.all()[0]
+        self.assertTrue(choice.vote())
+        self.assertEqual(1, choice.votes)
+    
+    def test_vote_after_end_date(self):
+        ended_question = create_question("Ended question", days=-5, end_day=-1)
+        choice = ended_question.choice_set.all()[0]
+        self.assertFalse(choice.vote())
+        self.assertEqual(0, choice.votes)
