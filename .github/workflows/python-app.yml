@@ -28,6 +28,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8
         pip install -r requirements.txt
+    - name: Set Environments
+      run: |
+        echo SECRET_KEY=${{ secrets.SECRET_KEY }} > .env
+        echo DEBUG=${{ secrets.DEBUG }} >> .env
+        echo TIME_ZONE=${{ secrets.TIME_ZONE }} >> .env
+        echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
+        echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
