@@ -30,8 +30,8 @@ SECRET_KEY = config('SECRET_KEY', cast=str,
 DEBUG = config('DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', 
-                       cast=lambda v: [s.strip() for s in v.split(',')], 
-                       default=[])
+                       cast=lambda v: [s.strip() for s in v.split(',')],
+                       default=[''])
 
 
 # Application definition
