@@ -15,10 +15,10 @@
         {% endfor %}
     </fieldset>
     <input type="submit" value="Vote">
-    <button>
-        <a href={% url 'index' %} class="redirect">Back</a>
-    </button>
-    <button>
-        <a href={% url 'polls:results' question.id %} class="redirect">Results</a>
-    </button>
+    <a href={% url 'index' %} class="redirect">
+        <button type='button'>Home</button>
+    <a href={% url 'polls:results' question.id %} class="redirect">
+        <button type='button'>Results</button>
+    </a>
+    
 </form>

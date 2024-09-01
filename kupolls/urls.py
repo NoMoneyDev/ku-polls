@@ -22,7 +22,6 @@ from django.conf import settings
 from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
-    # path('', lambda request: redirect('polls/', permanent=False), name='index'),
     path('', RedirectView.as_view(pattern_name='polls:index', permanent=False), name='index'),
     path('admin/', admin.site.urls),
     path('polls/', include('polls.urls'))

@@ -17,6 +17,10 @@ a.redirect {
     color: red;
 }
 
+.results th td {
+    padding: 15px;
+}
+
 body {
     background: white;
     background-image: url('images/drog.jpeg');

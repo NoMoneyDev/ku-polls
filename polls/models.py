@@ -65,5 +65,16 @@ class Choice(models.Model):
             return True
         return False
 
+    @property
+    def percent(self):
+        '''
+        Turn votes in this choice to percentage
+        '''
+        all_votes = sum(choice.votes for choice in self.question.choice_set.all())
+        if all_votes == 0:
+            return '0.00%'
+        return f"{self.votes/all_votes*100:.2f}%"
+
+
     def __str__(self):
         return self.choice_text

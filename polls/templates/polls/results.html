@@ -4,11 +4,19 @@
 
 <h1>{{ question.question_text }}</h1>
 
-<ul>
+<table class='results'>
+    <tr>
+        <th>Choices</th>
+        <th>Votes</th>
+        <th>Percentage</th>
+    </tr>
 {% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+    <tr>
+        <td>{{ choice.choice_text }}</td>
+        <td>{{ choice.votes }}</td>
+        <td>{{ choice.percent }}</td>
 {% endfor %}
-</ul>
+</table>
 
 <button>
     <a href={% url 'index' %} class="redirect">Home</a>
