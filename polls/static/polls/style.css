@@ -8,6 +8,16 @@ li a:hover {
     font-size: 2vh;
 }
 
+.buttons {
+    padding: 0px;
+}
+
+.nav {
+    padding: 5px;
+    margin-right: 3;
+    min-width: 4vw;
+}
+
 a.redirect {
     text-decoration: none !important;
     color: black;
@@ -17,8 +27,20 @@ a.redirect {
     color: red;
 }
 
-.results th td {
-    padding: 15px;
+td, tr, th {
+    border: 1px solid black;
+    border-spacing: 5px;
+    padding: 5px;
+
+}
+
+table {
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid black;
+    border-spacing: 5px;
+    border-collapse: collapse;
+    width: 40vw;
 }
 
 body {
