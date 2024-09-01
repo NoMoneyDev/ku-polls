@@ -1,3 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
 <form action="{% url 'polls:vote' question.id %}" method="post">
     {% csrf_token %}
     <fieldset>
@@ -10,5 +14,13 @@
             <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
         {% endfor %}
     </fieldset>
-    <input type="submit" value="Vote">
-    </form>
+    <br/>
+    <div class='buttons'>
+        <button class='nav'>Vote</button>
+        <a href={% url 'index' %} class="redirect">
+            <button type='button' class="redirect nav">Home</button>
+        <a href={% url 'polls:results' question.id %} class="redirect" >
+            <button type='button' class="redirect nav">Results</button>
+        </a>
+    </div>
+</form>
