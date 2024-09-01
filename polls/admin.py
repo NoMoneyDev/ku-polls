@@ -3,9 +3,11 @@ from .models import Question, Choice
 
 # Register your models here.
 
+
 class ChoiceInLine(admin.TabularInline):
     model = Choice
     extra = 1
+
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ['question_text', 'pub_date', 'was_published_recently']

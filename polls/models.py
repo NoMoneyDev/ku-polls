@@ -27,22 +27,23 @@ class Question(models.Model):
         '''
         now = timezone.now()
         return now >= self.pub_date >= now - datetime.timedelta(days=1)
-    
+
     def choices_more_than_one(self):
         '''
         Check if the question has 2 or more choices
         '''
         return self.choice_set.count() > 1
-    
+
     def is_published(self):
         '''Check if the question is past its publication time'''
         return timezone.now() >= self.pub_date
-    
+
     def can_vote(self):
         '''Check if the question is after pub_date and before end_date'''
         now = timezone.now()
-        return self.is_published() and (self.end_date is None or now <= self.end_date)
-    
+        return self.is_published() and \
+            (self.end_date is None or now <= self.end_date)
+
     def __str__(self):
         return self.question_text
 
@@ -57,7 +58,8 @@ class Choice(models.Model):
 
     def vote(self):
         '''
-        Cast a vote if able to, then return True if voted succesfully else False
+        Cast a vote if able to, then
+        return True if voted succesfully else False
         '''
         if self.question.can_vote():
             self.votes += 1
@@ -70,11 +72,11 @@ class Choice(models.Model):
         '''
         Turn votes in this choice to percentage
         '''
-        all_votes = sum(choice.votes for choice in self.question.choice_set.all())
+        all_votes = sum(choice.votes for choice in
+                        self.question.choice_set.all())
         if all_votes == 0:
             return '0.00%'
         return f"{self.votes/all_votes*100:.2f}%"
-
 
     def __str__(self):
         return self.choice_text

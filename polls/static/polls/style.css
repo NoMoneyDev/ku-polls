@@ -27,6 +27,16 @@ a.redirect {
     color: red;
 }
 
+.status-open {
+    background-color: lightgreen;
+    color: green;
+}
+
+.status-closed {
+    background-color: orange;
+    color: red;
+}
+
 td, tr, th {
     border: 1px solid black;
     border-spacing: 5px;

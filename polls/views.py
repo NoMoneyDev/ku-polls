@@ -7,13 +7,15 @@ from .models import Question, Choice
 
 # Create your views here.
 
+
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'questions_list'
 
     def get_queryset(self):
         questions = Question.objects.all()
-        ids = [q.id for q in questions if (q.is_published() and q.choices_more_than_one())]
+        ids = [q.id for q in questions
+               if (q.is_published() and q.choices_more_than_one())]
         return Question.objects.filter(id__in=ids).order_by('pub_date')[:5]
 
 
@@ -25,11 +27,15 @@ class DetailView(generic.DetailView):
         try:
             question = self.get_object()
         except Http404:
-            messages.error(request, 'The poll you are trying to access does not exists.')
+            messages.error(request,
+                           'The poll you are trying to access \
+                           does not exists.')
             return redirect('polls:index')
-        
+
         if not question.can_vote():
-            messages.error(request, 'The poll you are trying to access is not in the voting period.')
+            messages.error(request,
+                           'The poll you are trying to access \
+                           is not in the voting period.')
             return redirect('polls:index')
         return super().get(request, *args, **kwargs)
 
@@ -38,7 +44,6 @@ class DetailView(generic.DetailView):
         questions = Question.objects.all()
         ids = [q.id for q in questions if q.is_published()]
         return Question.objects.filter(id__in=ids)
-    
 
 
 class ResultsView(generic.DetailView):
@@ -52,9 +57,10 @@ def vote(request, question_id):
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         return render(request, 'polls/detail.html', {
-            'question' : question,
-            'error_message' : "You didn't select a choice.",
+            'question': question,
+            'error_message': "You didn't select a choice.",
         })
     else:
         selected_choice.vote()
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        return HttpResponseRedirect(
+            reverse('polls:results', args=(question.id,)))
