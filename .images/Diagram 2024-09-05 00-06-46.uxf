@@ -1,0 +1,31 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>60</x><y>80</y><w>210</w><h>130</h></coordinates><panel_attributes>Question
+--
++question_text: str
++pub_date: Datetime
+--
+was_published_recently(): bool
+choice_more_than_one(): bool
+is_published(): bool
+can_vote(): bool
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>420</x><y>90</y><w>210</w><h>70</h></coordinates><panel_attributes>Choice
+--
+question: Question
+choice_text: str
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>320</y><w>130</w><h>130</h></coordinates><panel_attributes>User
+--
+username: str
+password: str
+email
+first_name
+last_name
+--
+is_authenticated()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>420</x><y>330</y><w>210</w><h>80</h></coordinates><panel_attributes>Vote
+--
+user: User
+choice: Choice
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>260</x><y>120</y><w>180</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+&lt; is a response to</panel_attributes><additional_attributes>10;20;160;20</additional_attributes></element><element><id>Relation</id><coordinates><x>260</x><y>350</y><w>180</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+&lt; created by</panel_attributes><additional_attributes>10;20;160;20</additional_attributes></element><element><id>Relation</id><coordinates><x>520</x><y>150</y><w>70</w><h>200</h></coordinates><panel_attributes>lt=&lt;-
+vote to</panel_attributes><additional_attributes>10;10;10;180</additional_attributes></element></diagram>

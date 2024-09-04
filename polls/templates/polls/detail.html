@@ -19,6 +19,7 @@
         <button class='nav'>Vote</button>
         <a href={% url 'index' %} class="redirect">
             <button type='button' class="redirect nav">Home</button>
+        </a>
         <a href={% url 'polls:results' question.id %} class="redirect" >
             <button type='button' class="redirect nav">Results</button>
         </a>
