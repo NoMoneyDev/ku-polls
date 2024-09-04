@@ -69,3 +69,6 @@ All project documents are in the [Project Wiki](../../wiki/Home).
 - [Vision Statement](../../wiki/Vision%20Statement)
 - [Requirements](../../wiki/Requirements)
 - [Project Plan](../../wiki/Project%20Plan)
+
+# Test Badge
+[![Python application](https://github.com/NoMoneyDev/ku-polls/actions/workflows/python-app.yml/badge.svg)](https://github.com/NoMoneyDev/ku-polls/actions/workflows/python-app.yml)
