@@ -33,6 +33,8 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS',
                        cast=lambda v: [s.strip() for s in v.split(',')],
                        default=[''])
 
+LOGIN_REDIRECT_URL = 'polls:index'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Application definition
 
