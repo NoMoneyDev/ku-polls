@@ -24,7 +24,7 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='polls:index', permanent=False),
          name='index'),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls'), name='accounts'),
     path('admin/', admin.site.urls),
     path('polls/', include('polls.urls')),
 ]

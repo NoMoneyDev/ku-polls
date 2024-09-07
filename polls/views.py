@@ -3,14 +3,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.contrib import messages
 from django.urls import reverse
-from .models import Question, Choice
 from django.contrib.auth.decorators import login_required
-
-
-# Create your views here.
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Question, Choice
 
 
 class IndexView(generic.ListView):
+    '''Shows list of available polls'''
     template_name = 'polls/index.html'
     context_object_name = 'questions_list'
 
@@ -21,7 +20,8 @@ class IndexView(generic.ListView):
         return Question.objects.filter(id__in=ids).order_by('pub_date')[:5]
 
 
-class DetailView(generic.DetailView):
+class DetailView(generic.DetailView, LoginRequiredMixin):
+    '''Shows the choices and let users vote'''
     model = Question
     template_name = 'polls/detail.html'
 
@@ -49,20 +49,23 @@ class DetailView(generic.DetailView):
 
 
 class ResultsView(generic.DetailView):
+    '''Shows the result of the polls'''
     model = Question
     template_name = 'polls/results.html'
 
+
 @login_required
 def vote(request, question_id):
+    '''
+    Used for voting
+    '''
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
+        messages.error(request, "You didn't select a choice.")
+        return redirect('polls:detail', question_id)
     else:
         selected_choice.vote()
-        return HttpResponseRedirect(
-            reverse('polls:results', args=(question.id,)))
+        messages.success(request, 'Your vote has been recorded.')
+        return redirect('polls:results', question.id)

@@ -1,18 +1,13 @@
 {% extends "polls/base_template.html" %}
-{% include "polls/base_template.html" %}
 
 {% block content %}
 
     {% if messages %}
-        {% for message in messages %}
-        <li class="error_message">{{ message }}</li>
-        {% endfor %}
-    {% endif %}
-
-    {% if user.is_authenticated %}
-    Welcome back, {{ user.username }} 
-    {% else %}
-    Please <a href="{% url 'login' %}?next={{request.path}}">Login</a>
+    <ul class="messages">
+    {% for msg in messages %}
+        <li class="{{msg.tags}}">{{ msg }}</li>
+    {% endfor %}
+    </ul>
     {% endif %}
 
     {% if questions_list %}
