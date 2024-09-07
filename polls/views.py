@@ -4,6 +4,8 @@ from django.views import generic
 from django.contrib import messages
 from django.urls import reverse
 from .models import Question, Choice
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -50,7 +52,7 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
-
+@login_required
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
