@@ -1,8 +1,11 @@
+import datetime
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-from .models import Question
-import datetime
+from django.contrib.auth import authenticate
+from .models import Question, Vote
+
 
 # Create your tests here.
 
@@ -199,13 +202,22 @@ class QuestionCanVoteTest(TestCase):
     '''
     Test can_vote() in Question and test if you can vote
     '''
+    def setUp(self):
+        self.user = User.objects.create_user('Test', password='test')
+        authenticate(username=self.user.username, password='test')
+        return super().setUp()
+
+    def vote(self, choice):
+        vote = Vote.objects.create(choice=choice, user=self.user)
+        vote.save()
+
     def test_cannot_vote_before_pub_date(self):
         '''Test can_vote() with question that hasn't been published'''
         future_question = create_question("future question",
                                           days=5, end_day=10)
         choice = future_question.choice_set.all()[0]
         self.assertFalse(future_question.can_vote())
-        self.assertFalse(choice.vote())
+        self.vote(choice)
         self.assertEqual(0, choice.votes)
 
     def test_can_vote_after_pub_date(self):
@@ -217,7 +229,7 @@ class QuestionCanVoteTest(TestCase):
                                            days=-5, end_day=5)
         choice = present_question.choice_set.all()[0]
         self.assertTrue(present_question.can_vote())
-        self.assertTrue(choice.vote())
+        self.vote(choice)
         self.assertEqual(1, choice.votes)
 
     def test_cannot_vote_after_end_date(self):
@@ -228,7 +240,7 @@ class QuestionCanVoteTest(TestCase):
                                          days=-5, end_day=-1)
         choice = ended_question.choice_set.all()[0]
         self.assertFalse(ended_question.can_vote())
-        self.assertFalse(choice.vote())
+        self.vote(choice)
         self.assertEqual(0, choice.votes)
 
     def test_can_vote_last_second(self):
@@ -239,17 +251,26 @@ class QuestionCanVoteTest(TestCase):
                                             end_day=0)
         choice = last_sec_question.choice_set.all()[0]
         self.assertTrue(last_sec_question.can_vote())
-        self.assertTrue(choice.vote())
+        self.vote(choice)
         self.assertEqual(1, choice.votes)
 
 
 class QuestionVoteTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('Test', password='test')
+        authenticate(username=self.user.username, password='test')
+        return super().setUp()
+
+    def vote(self, choice):
+        vote = Vote.objects.create(choice=choice, user=self.user)
+        vote.save()
+
     def test_vote_before_pub_date(self):
         '''Test voting on the question before its pub_date'''
         future_question = create_question("future question",
                                           days=5, end_day=10)
         choice = future_question.choice_set.all()[0]
-        self.assertFalse(choice.vote())
+        self.vote(choice)
         self.assertEqual(0, choice.votes)
 
     def test_vote_after_pub_date(self):
@@ -260,7 +281,7 @@ class QuestionVoteTest(TestCase):
         present_question = create_question("present question",
                                            days=-5, end_day=5)
         choice = present_question.choice_set.all()[0]
-        self.assertTrue(choice.vote())
+        self.vote(choice)
         self.assertEqual(1, choice.votes)
 
     def test_vote_after_end_date(self):
@@ -268,5 +289,5 @@ class QuestionVoteTest(TestCase):
         ended_question = create_question("Ended question",
                                          days=-5, end_day=-1)
         choice = ended_question.choice_set.all()[0]
-        self.assertFalse(choice.vote())
+        self.vote(choice)
         self.assertEqual(0, choice.votes)

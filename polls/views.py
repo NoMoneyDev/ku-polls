@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
-from .models import Question, Choice
+from .models import Question, Choice, Vote
 
 
 class IndexView(generic.ListView):
@@ -61,14 +61,22 @@ def vote(request, question_id):
     Used for voting
     '''
     question = get_object_or_404(Question, pk=question_id)
+    user = request.user
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         messages.error(request, "You didn't select a choice.")
         return redirect('polls:detail', question_id)
+    try:
+        vote = Vote.objects.filter(choice__question=question, user=user).get()
+    except (KeyError, Vote.DoesNotExist):
+        vote = Vote.objects.create(choice=selected_choice, user=user)
+        vote.save()
+        return redirect('polls:results', question.id)
     else:
-        selected_choice.vote()
+        vote.choice = selected_choice
         messages.success(request, 'Your vote has been recorded.')
+        vote.save()
         return redirect('polls:results', question.id)
 
 
