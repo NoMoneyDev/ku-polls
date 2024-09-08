@@ -32,7 +32,29 @@ DEBUG = config('DEBUG', cast=bool, default=False)
 LOGGING = {
     "version": 1,  # the dictConfig format version
     "disable_existing_loggers": False,  # retain the default loggers
+    "level": "INFO",
+    "loggers": {
+        "": {
+            "level": "DEBUG",
+            "handlers": ["simple"],
+        },
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{asctime} {module} {message} {levelname} {name} \
+                {process:d} {thread:d} ",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "simple": {
+            "class": "logging.FileHandler",
+            "filename": "kupolls.log",
+            "formatter": "verbose",
+        }
+    },
 }
+
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS',
                        cast=lambda v: [s.strip() for s in v.split(',')],

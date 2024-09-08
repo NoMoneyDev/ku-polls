@@ -74,15 +74,16 @@ def vote(request, question_id):
         return redirect('polls:detail', question_id)
     try:
         vote = Vote.objects.filter(choice__question=question, user=user).get()
-        logger.info(f"{request.user.username} voted for {selected_choice.choice_text}")
     except (KeyError, Vote.DoesNotExist):
         vote = Vote.objects.create(choice=selected_choice, user=user)
         vote.save()
+        logger.info(f"{request.user.username} voted for {selected_choice.choice_text}")
         return redirect('polls:results', question.id)
     else:
         vote.choice = selected_choice
         messages.success(request, 'Your vote has been recorded.')
         vote.save()
+        logger.info(f"{request.user.username} voted for {selected_choice.choice_text}")
         return redirect('polls:results', question.id)
 
 
