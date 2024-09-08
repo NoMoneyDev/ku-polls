@@ -1,3 +1,4 @@
+import logging
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
@@ -7,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from .models import Question, Choice, Vote
+
+
+logger = logging.getLogger(__name__)
 
 
 class IndexView(generic.ListView):
@@ -65,10 +69,12 @@ def vote(request, question_id):
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
+        logger.error(f"{user.username} did not select a choice.")
         messages.error(request, "You didn't select a choice.")
         return redirect('polls:detail', question_id)
     try:
         vote = Vote.objects.filter(choice__question=question, user=user).get()
+        logger.info(f"{request.user.username} voted for {selected_choice.choice_text}")
     except (KeyError, Vote.DoesNotExist):
         vote = Vote.objects.create(choice=selected_choice, user=user)
         vote.save()
