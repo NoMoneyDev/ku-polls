@@ -25,6 +25,7 @@ urlpatterns = [
     path('', RedirectView.as_view(pattern_name='polls:index', permanent=False),
          name='index'),
     path('accounts/', include('django.contrib.auth.urls'), name='accounts'),
+    path('signup/', views.signup, name='signup'),
     path('admin/', admin.site.urls),
     path('polls/', include('polls.urls')),
 ]

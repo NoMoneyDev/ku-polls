@@ -69,3 +69,24 @@ def vote(request, question_id):
         selected_choice.vote()
         messages.success(request, 'Your vote has been recorded.')
         return redirect('polls:results', question.id)
+
+def signup(request):
+    '''Register new user to the site'''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # get named fields from the form data
+            username = form.cleaned_data.get('username')
+            # password input field is named 'password1'
+            raw_passwd = form.cleaned_data.get('password1')
+            user = authenticate(username=username,password=raw_passwd)
+            login(request, user)
+           return redirect('polls:index')
+        # what if form is not valid?
+        # we should display a message in signup.html
+    else:
+        # create a user form and display it the signup page
+        form = UserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})
+
