@@ -10,12 +10,12 @@
     </head>
 
     <body>
-        <p>
+        <div class='navbar'>
             {% if user.is_authenticated %}
                 <form action="{% url 'accounts:logout' %}" method="post"> 
                     {% csrf_token %} 
-                    <span>Welcome back, {{user.username}} </span>
-                    <button type="submit">Log Out</button> 
+                    <span class='welcome_user'>Welcome back, {{user.username}} </span>
+                    <button type="submit" class="logout">Log Out</button> 
                 </form>
             {% else %}
                 <a href="{% url 'accounts:login' %}?next={{request.path}}">
@@ -24,7 +24,7 @@
                     </button>
                 </a>
             {% endif %}
-        </p>
+            </div>
         {% block content %}
         {% endblock content %}
     </body>

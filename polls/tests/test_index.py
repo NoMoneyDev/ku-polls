@@ -1,5 +1,8 @@
+import datetime
+from django.utils import timezone
 from django.test import TestCase
 from django.urls import reverse
+from polls.models import Question
 
 
 def create_question(question_text, days=0, end_day=None,
