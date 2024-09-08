@@ -29,10 +29,39 @@ SECRET_KEY = config('SECRET_KEY', cast=str,
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', 
+LOGGING = {
+    "version": 1,  # the dictConfig format version
+    "disable_existing_loggers": False,  # retain the default loggers
+    "level": "INFO",
+    "loggers": {
+        "": {
+            "level": "DEBUG",
+            "handlers": ["simple"],
+        },
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{asctime} {module} {message} {levelname} {name} \
+                {process:d} {thread:d} ",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "simple": {
+            "class": "logging.FileHandler",
+            "filename": "kupolls.log",
+            "formatter": "verbose",
+        }
+    },
+}
+
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS',
                        cast=lambda v: [s.strip() for s in v.split(',')],
                        default=[''])
 
+LOGIN_REDIRECT_URL = 'polls:index'
+LOGOUT_REDIRECT_URL = 'accounts:login'
 
 # Application definition
 
@@ -61,10 +90,10 @@ TESTING = "test" in sys.argv
 if not TESTING:
     INSTALLED_APPS = [
         *INSTALLED_APPS,
-        "debug_toolbar",
+        # "debug_toolbar",
     ]
     MIDDLEWARE = [
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        # "debug_toolbar.middleware.DebugToolbarMiddleware",
         *MIDDLEWARE,
     ]
 
@@ -103,24 +132,22 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.\
-            UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.\
-            MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation\
-            CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.\
-            NumericPasswordValidator',
-    },
-]
+# AUTH_PWD_MODULE = "django.contrib.auth.password_validation."
+
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         "NAME": f"{AUTH_PWD_MODULE}UserAttributeSimilarityValidator",
+#     },
+#     {
+#         "NAME": f"{AUTH_PWD_MODULE}MinimumLengthValidator",
+#     },
+#     {
+#         "NAME": f"{AUTH_PWD_MODULE}CommonPasswordValidator",
+#     },
+#     {
+#         "NAME": f"{AUTH_PWD_MODULE}NumericPasswordValidator",
+#     },
+# ]
 
 
 # Internationalization

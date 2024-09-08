@@ -1,8 +1,9 @@
+import datetime
 from django.utils import timezone
 from django.db import models
 from django.contrib import admin
 from django.utils.timezone import now
-import datetime
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -54,18 +55,11 @@ class Choice(models.Model):
     '''
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
 
-    def vote(self):
-        '''
-        Cast a vote if able to, then
-        return True if voted succesfully else False
-        '''
-        if self.question.can_vote():
-            self.votes += 1
-            self.save()
-            return True
-        return False
+    @property
+    def votes(self):
+        '''Return the number of votes for this choice'''
+        return Vote.objects.filter(choice=self).count()
 
     @property
     def percent(self):
@@ -80,3 +74,16 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
+
+
+class Vote(models.Model):
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        question = self.choice.question
+        if question.can_vote():
+            return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user.username} : {self.choice.choice_text}"

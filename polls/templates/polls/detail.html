@@ -6,8 +6,12 @@
     {% csrf_token %}
     <fieldset>
         <legend><h1>{{ question.question_text }}</h1></legend>
-        {% if error_message %}
-            <p><strong>{{ error_message }}</strong></p>
+        {% if messages %}
+            <ul class="messages">
+            {% for msg in messages %}
+                <li class="{{msg.tags}}">{{ msg }}</li>
+            {% endfor %}
+            </ul>
         {% endif %}
         {% for choice in question.choice_set.all %}
             <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">

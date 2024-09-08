@@ -12,10 +12,27 @@ li a:hover {
     padding: 0px;
 }
 
+.logout {
+    background-color: lightblue;
+
+}
+
 .nav {
     padding: 5px;
     margin-right: 3;
     min-width: 4vw;
+}
+
+.navbar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: cyan;
+    width: 100%;
+    text-align: right;
+}
+
+.welcome_user {
+    font-size: 2vh;
 }
 
 a.redirect {
@@ -23,8 +40,12 @@ a.redirect {
     color: black;
 }
 
-.error_message {
+.error {
     color: red;
+}
+
+.success {
+    color: green;
 }
 
 .status-open {
@@ -58,4 +79,8 @@ body {
     background-image: url('images/drog.jpeg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
+}
+
+html, body{
+    height: 100%;    
 }
