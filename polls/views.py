@@ -4,7 +4,8 @@ from django.views import generic
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 from .models import Question, Choice
 
 
@@ -20,7 +21,7 @@ class IndexView(generic.ListView):
         return Question.objects.filter(id__in=ids).order_by('pub_date')[:5]
 
 
-class DetailView(generic.DetailView, LoginRequiredMixin):
+class DetailView(generic.DetailView):
     '''Shows the choices and let users vote'''
     model = Question
     template_name = 'polls/detail.html'
@@ -70,6 +71,7 @@ def vote(request, question_id):
         messages.success(request, 'Your vote has been recorded.')
         return redirect('polls:results', question.id)
 
+
 def signup(request):
     '''Register new user to the site'''
     if request.method == 'POST':
@@ -82,11 +84,10 @@ def signup(request):
             raw_passwd = form.cleaned_data.get('password1')
             user = authenticate(username=username,password=raw_passwd)
             login(request, user)
-           return redirect('polls:index')
+            return redirect('polls:index')
         # what if form is not valid?
         # we should display a message in signup.html
     else:
         # create a user form and display it the signup page
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
-

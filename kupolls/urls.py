@@ -20,6 +20,7 @@ from django.shortcuts import redirect
 from django.views.generic.base import RedirectView
 from django.conf import settings
 from debug_toolbar.toolbar import debug_toolbar_urls
+from polls import views
 
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='polls:index', permanent=False),
