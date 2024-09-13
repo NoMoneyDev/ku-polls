@@ -44,7 +44,7 @@ class UserAuthTest(django.test.TestCase):
         then I am logged out
         and then redirected to the login page.
         """
-        logout_url = reverse("accounts:logout")
+        logout_url = reverse("logout")
         # Authenticate the user.
         # We want to logout this user, so we need to associate the
         # user user with a session.  Setting client.user = ... doesn't work.
@@ -61,17 +61,17 @@ class UserAuthTest(django.test.TestCase):
         # should redirect us to where? Polls index? Login?
         self.assertRedirects(response, reverse(settings.LOGOUT_REDIRECT_URL))
 
+
     def test_login_view(self):
         """A user can login using the login view."""
-        login_url = reverse("accounts:login")
+        login_url = reverse("login")
         # Can get the login page
         response = self.client.get(login_url)
         self.assertEqual(200, response.status_code)
         # Can login using a POST request
         # usage: client.post(url, {'key1":"value", "key2":"value"})
         form_data = {"username": "testuser",
-                     "password": "FatChance!"
-                    }
+                     "password": "FatChance!"}
         response = self.client.post(login_url, form_data)
         # after successful login, should redirect browser somewhere
         self.assertEqual(302, response.status_code)
@@ -97,7 +97,7 @@ class UserAuthTest(django.test.TestCase):
         self.assertEqual(response.status_code, 302)  # could be 303
         # TODO: this test fails because reverse('login') does not include
         # the query parameter ?next=/polls/1/vote/
-        #self.assertRedirects(response, reverse('login') )
+        # self.assertRedirects(response, reverse('login') )
         # How to fix it? 
-        login_with_next = f"{reverse('accounts:login')}?next={vote_url}"
-        self.assertRedirects(response, login_with_next )
+        login_with_next = f"{reverse('login')}?next={vote_url}"
+        self.assertRedirects(response, login_with_next)
