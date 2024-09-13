@@ -4,6 +4,7 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 from . import views
 
 app_name = 'polls'
+
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('<int:pk>/', views.DetailView.as_view(), name='detail'),

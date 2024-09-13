@@ -1,13 +1,16 @@
 import logging
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 from django.views import generic
 from django.contrib import messages
 from django.urls import reverse
+from django.dispatch import receiver
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from .models import Question, Choice, Vote
+from kupolls.settings import LOGOUT_REDIRECT_URL
 
 
 logger = logging.getLogger(__name__)
@@ -106,3 +109,33 @@ def signup(request):
         # create a user form and display it the signup page
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+
+def get_client_ip(request):
+    """Get the visitor’s IP address using request headers."""
+    if request is None:
+        return 'Unknown'
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
+logger = logging.getLogger(__name__)
+
+
+@receiver(user_logged_out)
+def user_logged_out_log(sender, request, user, **kwargs):
+    logger.info(f"'{user.username}' logged out from '{get_client_ip(request)}'")
+
+
+@receiver(user_logged_in)
+def user_logged_in_log(sender, request, user, **kwargs):
+    logger.info(f"{user.username} logged in from {get_client_ip(request)}")
+
+
+@receiver(user_login_failed)
+def user_login_failed_callback(sender, credentials, **kwargs):
+    logger.warning(f"Log in attempt failed for {credentials.get('username', None)} from {get_client_ip(credentials.get('request', None))}")
