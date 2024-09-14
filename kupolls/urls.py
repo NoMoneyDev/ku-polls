@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import redirect
 from django.views.generic.base import RedirectView
-from django.contrib.auth import views as acc_views
 from django.conf import settings
 from debug_toolbar.toolbar import debug_toolbar_urls
 from polls import views
@@ -26,12 +25,10 @@ from polls import views
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='polls:index', permanent=False),
          name='index'),
-    path('accounts/login/', acc_views.LoginView.as_view(), name="login"),
-    path('accounts/logout/', acc_views.LogoutView.as_view(), name="logout"),
-    path('accounts/', include('django.contrib.auth.urls'), name='accounts'),
     path('signup/', views.signup, name='signup'),
     path('admin/', admin.site.urls),
     path('polls/', include('polls.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 if not settings.TESTING:
