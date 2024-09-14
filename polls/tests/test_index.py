@@ -111,8 +111,8 @@ class QuestionIsPublishedTest(TestCase):
         past_question = create_question(question_text='Past Question.',
                                         days=-5)
         url = reverse('polls:index')
-        self.assertTrue(past_question.is_published())
         response = self.client.get(url)
+        self.assertTrue(past_question.is_published())
         self.assertContains(response, past_question.question_text)
 
     def test_default_question(self):

@@ -61,7 +61,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS',
                        default=[''])
 
 LOGIN_REDIRECT_URL = 'polls:index'
-LOGOUT_REDIRECT_URL = 'accounts:login'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Application definition
 
