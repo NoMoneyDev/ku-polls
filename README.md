@@ -1,4 +1,5 @@
 # KU Polls: Online Survey Questions 
+[![Ku-Polls Unittest](https://github.com/NoMoneyDev/ku-polls/actions/workflows/kupolls-test.yml/badge.svg)](https://github.com/NoMoneyDev/ku-polls/actions/workflows/kupolls-test.yml)
 
 An application to conduct online polls and surveys based
 on the [Django Tutorial project](https://docs.djangoproject.com/en/5.1/intro/tutorial01/), with
@@ -69,6 +70,3 @@ All project documents are in the [Project Wiki](../../wiki/Home).
 - [Vision Statement](../../wiki/Vision%20Statement)
 - [Requirements](../../wiki/Requirements)
 - [Project Plan](../../wiki/Project%20Plan)
-
-# Test Badge
-[![Python application](https://github.com/NoMoneyDev/ku-polls/actions/workflows/python-app.yml/badge.svg)](https://github.com/NoMoneyDev/ku-polls/actions/workflows/python-app.yml)
