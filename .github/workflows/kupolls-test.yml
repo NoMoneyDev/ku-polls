@@ -35,4 +35,4 @@ jobs:
         echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
     - name: Test with pytest
       run: |
-        python manage.py test polls/tests
+        python manage.py test
