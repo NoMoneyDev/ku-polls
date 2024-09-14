@@ -48,14 +48,27 @@ a.redirect {
     color: green;
 }
 
-.status-open {
-    background-color: lightgreen;
-    color: green;
+.polls-text {
+    text-decoration: none !important;
 }
 
-.status-closed {
-    background-color: orange;
-    color: red;
+.polls {
+    border-radius: 15px;
+    max-width: 50vw;
+    min-height: 5vh;
+    background-color: rgb(217, 217, 217, 0.4);
+    display: flex;
+    padding: 5px;
+}
+
+.status {
+    border-radius: 6px;
+    color: black;
+    min-width: 6vw;
+    max-height: 2.5vh;
+    margin-left: auto; 
+    margin-right: 2vw;
+    text-align: center;
 }
 
 td, tr, th {
