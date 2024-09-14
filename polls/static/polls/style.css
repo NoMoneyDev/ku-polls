@@ -48,9 +48,6 @@ a.redirect {
     color: green;
 }
 
-.polls-text {
-    text-decoration: none !important;
-}
 
 .polls {
     border-radius: 15px;
@@ -59,6 +56,11 @@ a.redirect {
     background-color: rgb(217, 217, 217, 0.4);
     display: flex;
     padding: 5px;
+    margin: 2vh;
+}
+
+.polls-text {
+    text-decoration: none !important;
 }
 
 .status {
