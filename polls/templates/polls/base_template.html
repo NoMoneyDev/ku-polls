@@ -11,6 +11,12 @@
 
     <body>
         <div class='navbar'>
+            <a class='index-text' href='{% url 'polls:index' %}'>
+                <h1>
+                    KU-POLLS
+                </h1>
+            </a>
+            <div class='user-greeting'>
             {% if user.is_authenticated %}
                 <form action="{% url 'logout' %}" method="post"> 
                     {% csrf_token %} 
@@ -25,6 +31,7 @@
                 </a>
             {% endif %}
             </div>
+        </div>
         {% block content %}
         {% endblock content %}
     </body>

@@ -1,20 +1,26 @@
-li a {
-    color: green;
-    font-size: 2vh;   
-}
-
-li a:hover {
-    color: lightgreen;
-    font-size: 2vh;
-}
-
 .buttons {
     padding: 0px;
 }
+.index-text {
+    color: black;
+    text-decoration: none !important;
+    margin-left: 3vw;
+}
+
+.user-greeting {
+    display: flex;
+    margin-left: auto;
+    margin-right: 2vw;
+    margin-top: auto;
+    margin-bottom: auto;
+}
 
 .logout {
-    background-color: lightblue;
+    background-color: lightgray;
+}
 
+h1.polls-header {
+    color: white;
 }
 
 .nav {
@@ -26,9 +32,13 @@ li a:hover {
 .navbar {
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: cyan;
+    background-color: lightblue;
     width: 100%;
-    text-align: right;
+    display: flex;
+}
+
+.no-text-decor {
+    text-decoration: none !important;
 }
 
 .welcome_user {
@@ -40,6 +50,18 @@ a.redirect {
     color: black;
 }
 
+a.button {
+    padding: 1px 6px;
+    border: 1px outset buttonborder;
+    border-radius: 3px;
+    color: black;
+    background-color: lightgray;
+    text-decoration: none;
+    margin-bottom: 0vh;
+    margin-top: auto;
+    max-width: 6vw;
+}
+
 .error {
     color: red;
 }
@@ -48,29 +70,60 @@ a.redirect {
     color: green;
 }
 
+.polls-list {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 7vw;
+}
 
 .polls {
     border-radius: 15px;
-    max-width: 50vw;
-    min-height: 5vh;
+    min-width: 25vw;
+    max-width: 40vw;
+    height: 20vh;
+    min-height: 6vh;
+    max-height: 20vh;
     background-color: rgb(217, 217, 217, 0.4);
     display: flex;
     padding: 5px;
-    margin: 2vh;
+    margin: 1vh;
+    cursor: default;
+}
+
+.polls:hover {
+    background-color: rgb(190, 190, 190, 0.7);
 }
 
 .polls-text {
-    text-decoration: none !important;
+    font-size: 2vw;
+    color: black;
+}
+
+.polls-result {
+    margin-left: auto;
+    margin-right: 2vw;
+    margin-top: auto;
+    margin-bottom: 2vh;
+}
+
+.polls-flag-and-button {
+    margin-left: auto;
+    margin-right: 2vw;
+    max-width: 6vw;
+    padding: 5px;
+    display: grid;
+    grid-template: auto, auto;
 }
 
 .status {
     border-radius: 6px;
     color: black;
-    min-width: 6vw;
+    min-width: 8.5vw;
     max-height: 2.5vh;
     margin-left: auto; 
     margin-right: 2vw;
     text-align: center;
+    margin-bottom: 5px;
 }
 
 td, tr, th {
