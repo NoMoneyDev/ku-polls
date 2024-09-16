@@ -39,8 +39,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup Coverage
+    - name: Setup packages
       run: |
+        pip install -r requirements.txt
         pip install coverage
     - name: Test with coverage
       run: |
