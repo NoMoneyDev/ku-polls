@@ -132,17 +132,21 @@ a.button {
     margin-bottom: 5px;
 }
 
+.results-header {
+    color: white;
+}
+
 td, tr, th {
-    border: 1px solid black;
+    border: 1px solid white;
     border-spacing: 5px;
     padding: 5px;
-
+    color: white;
 }
 
 table {
     padding: 5px;
     margin: 5px;
-    border: 1px solid black;
+    border: 1px solid white;
     border-spacing: 5px;
     border-collapse: collapse;
     width: 40vw;
