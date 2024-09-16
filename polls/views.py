@@ -84,7 +84,7 @@ def vote(request, question_id):
         return redirect('polls:results', question.id)
     else:
         vote.choice = selected_choice
-        messages.success(request, 'Your vote has been recorded.')
+        messages.success(request, f'Your vote for "{vote.choice}" has been recorded.')
         vote.save()
         logger.info(f"{request.user.username} voted for {selected_choice.choice_text}")
         return redirect('polls:results', question.id)
