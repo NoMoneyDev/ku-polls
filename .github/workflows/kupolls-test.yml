@@ -33,6 +33,16 @@ jobs:
         echo DEBUG=${{ secrets.DEBUG }} >> .env
         echo TIME_ZONE=${{ secrets.TIME_ZONE }} >> .env
         echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
-    - name: Test with pytest
+  
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Test with coverage
       run: |
-        python manage.py test
+        coverage run manage.py test
+    - name: Generate Coverage Report
+      run: |
+        coverage report
+
