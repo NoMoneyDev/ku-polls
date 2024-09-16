@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-<h1>{{ question.question_text }}</h1>
+<h1 class='results-header'>{{ question.question_text }}</h1>
 
 {% if messages %}
     <ul class="messages">
