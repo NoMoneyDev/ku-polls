@@ -1,0 +1,30 @@
+[run]
+
+branch = True
+
+omit = 
+    # python libraries location
+    /usr/*
+    # exclude init files
+    */__init__.py
+    # exclude migrations files
+    */migrations/*
+    # exclude manage.py
+    manage.py
+    # exclude everything in kupolls
+    kupolls/*
+    # exclude admin.py
+    admin.py
+    # exclude everything in tests
+    */tests/*
+
+include =
+    # include everything in polls
+    polls/*
+
+[report]
+exclude_also = 
+    # ignore __repr__
+    def __repr__ 
+    # ignore __str__
+    def __str__ 
