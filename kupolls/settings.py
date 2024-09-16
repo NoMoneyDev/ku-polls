@@ -29,36 +29,9 @@ SECRET_KEY = config('SECRET_KEY', cast=str,
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-LOGGING = {
-    "version": 1,  # the dictConfig format version
-    "disable_existing_loggers": False,  # retain the default loggers
-    "level": "INFO",
-    "loggers": {
-        "": {
-            "level": "DEBUG",
-            "handlers": ["simple"],
-        },
-    },
-    "formatters": {
-        "verbose": {
-            "format": "{asctime} {module} {message} {levelname} {name} \
-                {process:d} {thread:d} ",
-            "style": "{",
-        },
-    },
-    "handlers": {
-        "simple": {
-            "class": "logging.FileHandler",
-            "filename": "kupolls.log",
-            "formatter": "verbose",
-        }
-    },
-}
-
-
 ALLOWED_HOSTS = config('ALLOWED_HOSTS',
                        cast=lambda v: [s.strip() for s in v.split(',')],
-                       default=[''])
+                       default='*')
 
 LOGIN_REDIRECT_URL = 'polls:index'
 LOGOUT_REDIRECT_URL = 'login'
@@ -176,3 +149,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+LOGGING = {
+    "version": 1,  # the dictConfig format version
+    "disable_existing_loggers": False,  # retain the default loggers
+    "level": "INFO",
+    "loggers": {
+        "": {
+            "level": "DEBUG",
+            "handlers": ["simple"],
+        },
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{asctime} {module} {message} {levelname} {name} \
+                {process:d} {thread:d} ",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "simple": {
+            "class": "logging.FileHandler",
+            "filename": "kupolls.log",
+            "formatter": "verbose",
+        }
+    },
+}
