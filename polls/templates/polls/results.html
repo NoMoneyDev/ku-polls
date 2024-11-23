@@ -20,7 +20,7 @@
         <th>Percentage</th>
     </tr>
 {% for choice in question.choice_set.all %}
-    <tr {% if user.vote_set.filter choice %}style="color: lightgreen"{% endif %}>
+    <tr>
         <td>{{ choice.choice_text }}</td>
         <td>{{ choice.votes }}</td>
         <td>{{ choice.percent }}</td>
