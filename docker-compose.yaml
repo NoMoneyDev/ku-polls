@@ -1,0 +1,47 @@
+services:
+  db:
+    image: "postgres:17"
+    healthcheck:
+      test: [ 
+        "CMD-SHELL", 
+        "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"
+      ]
+      start_period: 10s
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    environment:
+      POSTGRES_USER: "${DATABASE_USER}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
+      POSTGRES_DB: "${DATABASE_NAME}"
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 1gb
+  app:
+    build:
+      context: .
+      args:
+        SECRET_KEY: "${SECRET_KEY?:SECRET_KEY not set}"
+    image: ku-polls
+    command:
+    environment:
+      SECRET_KEY: "${SECRET_KEY?:SECRET_KEY not set}"
+      DATABASE_USERNAME: "${DATABASE_USER}"
+      DATABASE_PASSWORD: "${DATABASE_PASSWORD}"
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+    links:
+      - db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '8000:8000'
+    deploy:
+      resources:
+        limits:
+          memory: 256mb
